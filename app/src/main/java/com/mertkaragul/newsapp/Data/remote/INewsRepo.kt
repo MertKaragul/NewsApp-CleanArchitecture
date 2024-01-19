@@ -6,7 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface INewsRepo {
-    @GET("top-headlines")
+    @GET("v2/top-headlines")
     suspend fun getTopHeadlines(
         @Query("country") country : String = Constants.COUNTRY,
         @Query("apiKey") apiKey : String = Constants.API_KEY

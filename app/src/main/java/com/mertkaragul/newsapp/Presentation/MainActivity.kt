@@ -24,10 +24,15 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             NewsAppTheme {
-                val navController = rememberNavController()
-                NavHost(navController = navController, startDestination = Screen.NewsScreen.route ){
-                    composable(Screen.NewsScreen.route){
-                        NewsView()
+                Surface(
+                    color = MaterialTheme.colorScheme.background,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    val navController = rememberNavController()
+                    NavHost(navController = navController, startDestination = Screen.NewsScreen.route ){
+                        composable(Screen.NewsScreen.route){
+                            NewsView()
+                        }
                     }
                 }
             }
