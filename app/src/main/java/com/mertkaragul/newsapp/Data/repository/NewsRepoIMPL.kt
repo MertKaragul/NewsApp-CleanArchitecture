@@ -15,5 +15,9 @@ class NewsRepoIMPL @Inject constructor(
         return iNewsRepo.getTopHeadlines()
     }
 
+    override suspend fun getNewsWithCategories(categoryName: String): NewsDTO {
+        return iNewsRepo.getNewsWithCategories(category = categoryName)
+    }
+
 
 }

@@ -22,12 +22,9 @@ class NewsViewModel @Inject constructor(
     val state = _state
 
     init {
-        viewModelScope.launch {
-            getNews()
-        }
+        getNews()
     }
-
-    private suspend fun getNews(){
+    private fun getNews(){
         getNewsUseCase.executeGetNews().onEach { it ->
             when(it){
                 is Resource.Success -> {
@@ -60,6 +57,47 @@ class NewsViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
+    private fun getNewsWithCategories(category : String){
+        getNewsUseCase.executeGetNewsWithCategories(category).onEach { it ->
+            when(it){
+                is Resource.Success -> {
+                    if (it.data == null){
+                        _state.value = _state.value.copy(
+                            isLoading = false,
+                            error = "News cannot be get, please try again"
+                        )
+                    }else{
+                        _state.value = _state.value.copy(
+                            isLoading = false,
+                            news = it.data.articles.map { it.toArticleModel() }
+                        )
+                    }
+                }
+
+                is Resource.Loading -> {
+                    _state.value = _state.value.copy(
+                        isLoading = true
+                    )
+                }
+
+                is Resource.Error -> {
+                    _state.value = _state.value.copy(
+                        isLoading = false,
+                        error = it.message ?: "Something went wrong"
+                    )
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
+
+
+    fun onEvent(newsEvent: NewsEvent){
+        when(newsEvent){
+            is NewsEvent.GetNewsByCategories -> {
+                getNewsWithCategories(newsEvent.category)
+            }
+        }
+    }
 
 
 

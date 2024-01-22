@@ -5,5 +5,7 @@ import com.mertkaragul.newsapp.Data.remote.dto.NewsDTO
 interface NewsRepo {
     suspend fun getTopHeadlines() : NewsDTO?
 
+    suspend fun getNewsWithCategories(categoryName : String) : NewsDTO?
+
     
 }

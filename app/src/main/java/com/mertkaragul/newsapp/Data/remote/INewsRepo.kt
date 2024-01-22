@@ -11,4 +11,12 @@ interface INewsRepo {
         @Query("country") country : String = Constants.COUNTRY,
         @Query("apiKey") apiKey : String = Constants.API_KEY
     ) : NewsDTO
+
+
+    @GET("v2/top-headlines")
+    suspend fun getNewsWithCategories(
+        @Query("country") country : String = Constants.COUNTRY,
+        @Query("category") category : String,
+        @Query("apiKey") apiKey : String = Constants.API_KEY
+    ) : NewsDTO
 }

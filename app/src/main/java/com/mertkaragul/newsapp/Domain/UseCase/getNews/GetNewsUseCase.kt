@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class GetNewsUseCase @Inject constructor(private val newsRepo: NewsRepo) {
-    suspend fun executeGetNews() : Flow<Resource<NewsDTO>> = flow {
+    fun executeGetNews() : Flow<Resource<NewsDTO>> = flow {
         emit(Resource.Loading())
 
         val newsDTO = newsRepo.getTopHeadlines()
@@ -18,6 +18,21 @@ class GetNewsUseCase @Inject constructor(private val newsRepo: NewsRepo) {
         // Null kontrolü ekleyin
         if (newsDTO != null) {
             emit(Resource.Success(newsDTO))
+        } else {
+            emit(Resource.Error("News data is null"))
+        }
+    }.catch {
+        emit(Resource.Error(it.localizedMessage ?: "Something went wrong"))
+    }
+
+
+
+    fun executeGetNewsWithCategories(categoryName : String) : Flow<Resource<NewsDTO>> = flow<Resource<NewsDTO>> {
+        emit(Resource.Loading())
+
+        val news = newsRepo.getNewsWithCategories(categoryName)
+        if (news != null) {
+            emit(Resource.Success(news))
         } else {
             emit(Resource.Error("News data is null"))
         }
